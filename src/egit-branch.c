@@ -75,3 +75,28 @@ emacs_value egit_branch_create_from_annotated(emacs_env *env, emacs_value _repo,
 
     return egit_wrap(env, EGIT_REFERENCE, ref);
 }
+
+EGIT_DOC(branch_delete, "REPO BRANCH", "Delete BRANCH in REPO.");
+emacs_value egit_branch_delete(emacs_env *env, emacs_value _repo, emacs_value _branch)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    
+    EGIT_ASSERT_STRING(_branch);
+    
+    git_reference *targetRef;
+    int retval;
+    {
+      char *branch = EGIT_EXTRACT_STRING(_branch);
+      retval = git_reference_dwim(&targetRef, repo, branch);
+      free(branch);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    EGIT_CHECK_ERROR(git_reference_is_branch(targetRef));
+
+    retval = git_branch_delete(targetRef);
+    EGIT_CHECK_ERROR(retval);
+
+    return em_t;
+}
