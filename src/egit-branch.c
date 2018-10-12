@@ -100,3 +100,27 @@ emacs_value egit_branch_delete(emacs_env *env, emacs_value _repo, emacs_value _b
 
     return em_t;
 }
+
+EGIT_DOC(branch_is_checked_out, "REPO BRANCH", "Check if BRANCH in REPO is checked out.");
+emacs_value egit_branch_is_checked_out(emacs_env *env, emacs_value _repo, emacs_value _branch)
+{
+    EGIT_ASSERT_REPOSITORY(_repo);
+    git_repository *repo = EGIT_EXTRACT(_repo);
+    
+    EGIT_ASSERT_STRING(_branch);
+    
+    git_reference *targetRef;
+    int retval;
+    {
+      char *branch = EGIT_EXTRACT_STRING(_branch);
+      retval = git_reference_dwim(&targetRef, repo, branch);
+      free(branch);
+    }
+    EGIT_CHECK_ERROR(retval);
+
+    EGIT_CHECK_ERROR(git_reference_is_branch(targetRef));
+
+    retval = git_branch_is_checked_out(targetRef);
+    return retval ? em_t : em_nil;
+}
+

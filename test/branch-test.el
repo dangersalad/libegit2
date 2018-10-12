@@ -41,3 +41,12 @@
                    (should-error (libgit-branch-delete repo "master"))
                    (should (libgit-branch-delete repo "second")))))
 
+(ert-deftest branch-is-checked-out ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let ((repo (libgit-repository-open path)))
+                   (should (libgit-branch-is-checked-out repo "master"))
+                   (should-not (libgit-branch-is-checked-out repo "second")))))
+
