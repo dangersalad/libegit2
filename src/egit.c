@@ -369,4 +369,5 @@ void egit_init(emacs_env *env)
     DEFUN("libgit-branch-delete", branch_delete, 2, 2);
     DEFUN("libgit-branch-is-checked-out", branch_is_checked_out, 2, 2);
     DEFUN("libgit-branch-is-head", branch_is_head, 2, 2);
+    DEFUN("libgit-lookup", branch_lookup, 2, 3);
 }

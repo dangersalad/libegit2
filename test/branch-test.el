@@ -59,3 +59,15 @@
                    (should (libgit-branch-is-head repo "master"))
                    (should-not (libgit-branch-is-head repo "second")))))
 
+(ert-deftest branch-lookup ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let ((repo (libgit-repository-open path)))
+                   (should (libgit-lookup repo "master"))
+                   (should (libgit-lookup repo "second"))
+                   (should (libgit-lookup repo "second"))
+                   (should-error (libgit-lookup repo "third"))
+                   (should-error (libgit-lookup repo "master" t)))))
+
