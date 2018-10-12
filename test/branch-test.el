@@ -50,3 +50,12 @@
                    (should (libgit-branch-is-checked-out repo "master"))
                    (should-not (libgit-branch-is-checked-out repo "second")))))
 
+(ert-deftest branch-is-head ()
+  (with-temp-dir path
+                 (init)
+                 (commit-change "test" "content")
+                 (run "git" "branch" "second")
+                 (let ((repo (libgit-repository-open path)))
+                   (should (libgit-branch-is-head repo "master"))
+                   (should-not (libgit-branch-is-head repo "second")))))
+
