@@ -5,7 +5,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-extern emacs_value em_nil, em_stringp, em_t;
+extern emacs_value em_nil, em_t, em_stringp, em_integerp;
 
 // Git object predicates and types
 extern emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p;
@@ -65,6 +65,15 @@ void em_signal_wrong_value(emacs_env *env, emacs_value actual);
  * @return The string (owned pointer).
  */
 char *em_get_string(emacs_env *env, emacs_value arg);
+
+/**
+ * Return an integer from an emacs_value.
+ * Caller is responsible for ensuring that the value is an integer.
+ * @param env The active Emacs environment.
+ * @param arg Emacs value representing an integer.
+ * @return The integer.
+ */
+int em_get_integer(emacs_env *env, emacs_value arg);
 
 /**
  * Call (cons car cdr) in Emacs.

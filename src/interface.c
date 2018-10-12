@@ -11,7 +11,7 @@
 // We store some globa references to emacs objects, mostly symbols,
 // so that we don't have to waste time calling intern later on.
 
-emacs_value em_nil, em_stringp, em_t;
+emacs_value em_nil, em_t, em_stringp, em_integerp;
 
 // Git object predicates
 emacs_value em_libgit_object_p, em_libgit_repository_p, em_libgit_reference_p;
@@ -35,6 +35,7 @@ void em_init(emacs_env *env)
 {
     em_nil = GLOBREF(INTERN("nil"));
     em_stringp = GLOBREF(INTERN("stringp"));
+    em_integerp = GLOBREF(INTERN("integerp"));
     em_t = GLOBREF(INTERN("t"));
 
     em_libgit_object_p = GLOBREF(INTERN("libgit-object-p"));
@@ -138,6 +139,11 @@ char *em_get_string(emacs_env *env, emacs_value arg)
     env->copy_string_contents(env, arg, buf, &size);
 
     return buf;
+}
+
+int em_get_integer(emacs_env *env, emacs_value arg)
+{
+    return env->extract_integer(env, arg);
 }
 
 emacs_value em_cons(emacs_env *env, emacs_value car, emacs_value cdr)
